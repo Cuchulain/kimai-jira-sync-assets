@@ -1,0 +1,1 @@
+# kimai-jira-sync-assets
