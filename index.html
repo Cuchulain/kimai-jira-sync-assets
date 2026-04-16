@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Kimai Jira Sync connects Kimai timesheets with Jira worklogs, imports Jira tasks into Kimai, and keeps teams in sync without manual double entry.">
+    <title>Kimai Jira Sync — Time tracking that reaches Jira automatically</title>
+
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ink: '#07111f',
+                        panel: '#0c1728',
+                        line: 'rgba(148, 163, 184, 0.22)',
+                        mint: '#76e5c9',
+                        sky: '#83cfff',
+                        gold: '#ffd77a'
+                    },
+                    fontFamily: {
+                        display: ['Syne', 'sans-serif'],
+                        body: ['"Source Sans 3"', 'sans-serif']
+                    },
+                    boxShadow: {
+                        soft: '0 20px 70px rgba(7, 17, 31, 0.35)'
+                    }
+                }
+            }
+        };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Source Sans 3', sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(118, 229, 201, 0.18), transparent 0 30%),
+                radial-gradient(circle at top right, rgba(131, 207, 255, 0.16), transparent 0 28%),
+                linear-gradient(135deg, #050b14 0%, #07111f 42%, #0a1628 100%);
+            color: #edf4ff;
+        }
+
+        .grain::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.08;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 22px 22px;
+            mask-image: radial-gradient(circle at center, black, transparent 82%);
+        }
+
+        .section-card {
+            background: linear-gradient(180deg, rgba(12, 23, 40, 0.88), rgba(10, 19, 33, 0.92));
+            border: 1px solid rgba(148, 163, 184, 0.22);
+            backdrop-filter: blur(10px);
+        }
+
+        .glow-ring {
+            box-shadow:
+                0 0 0 1px rgba(118, 229, 201, 0.18),
+                0 16px 60px rgba(7, 17, 31, 0.45);
+        }
+    </style>
+</head>
+<body class="grain min-h-full antialiased">
+<div class="relative isolate overflow-hidden">
+    <div class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,rgba(131,207,255,0.1),transparent_0_35%)]"></div>
+
+    <header class="mx-auto flex max-w-7xl items-center justify-between px-4 py-5 sm:px-6 lg:px-8">
+        <div class="flex items-center gap-3">
+            <div class="flex h-11 w-11 items-center justify-center rounded-2xl border border-emerald-300/30 bg-emerald-300/10 text-lg shadow-soft">⏱️</div>
+            <div>
+                <div class="font-display text-lg font-bold tracking-tight text-white">Kimai Jira Sync</div>
+                <div class="text-sm text-slate-300">Commercial Kimai plugin</div>
+            </div>
+        </div>
+
+        <div class="hidden items-center gap-3 md:flex">
+            <a href="https://github.com/Cuchulain/kimai-jira-sync/releases/latest" target="_blank" rel="noopener noreferrer" class="rounded-full border border-slate-400/30 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-emerald-300/50 hover:text-white">Public release</a>
+            <a href="https://witcher.lemonsqueezy.com/checkout/buy/04e1eaf8-8595-4272-b30a-597ff53a2988" target="_blank" rel="noopener noreferrer" class="rounded-full bg-emerald-300 px-4 py-2 text-sm font-bold text-slate-950 transition hover:bg-emerald-200">Buy on Lemon Squeezy</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="mx-auto grid max-w-7xl gap-10 px-4 pb-12 pt-4 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:px-8 lg:pb-20 lg:pt-8">
+            <div class="flex flex-col justify-center">
+                <div class="mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-emerald-300/25 bg-emerald-300/10 px-3 py-1 text-sm font-semibold text-emerald-100">
+                    <span class="h-2 w-2 rounded-full bg-emerald-300"></span>
+                    Kimai → Jira without double entry
+                </div>
+
+                <h1 class="font-display text-4xl font-extrabold leading-none text-white sm:text-5xl lg:text-6xl">
+                    Time tracking that reaches Jira automatically.
+                </h1>
+
+                <p class="mt-5 max-w-2xl text-lg text-slate-300 sm:text-xl">
+                    Turn Kimai into a clean front-end for Jira worklogs. Sync created, updated, and deleted time entries,
+                    import Jira tasks as activities, and keep every project aligned with less admin overhead.
+                </p>
+
+                <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+                    <a id="download-release"
+                       href="https://github.com/Cuchulain/kimai-jira-sync/releases/latest/download/KimaiJiraSyncBundle.zip"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="inline-flex items-center justify-center rounded-full bg-emerald-300 px-6 py-3 text-base font-bold text-slate-950 shadow-soft transition hover:bg-emerald-200">
+                        Download latest ZIP
+                    </a>
+                    <a href="https://witcher.lemonsqueezy.com/checkout/buy/04e1eaf8-8595-4272-b30a-597ff53a2988"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="inline-flex items-center justify-center rounded-full border border-slate-300/30 px-6 py-3 text-base font-semibold text-white transition hover:border-sky-300/60 hover:bg-slate-900/40">
+                        Buy license
+                    </a>
+                </div>
+
+                <p class="mt-3 text-sm text-slate-400">
+                    Uses the latest public GitHub release and resolves the newest ZIP asset automatically when available.
+                </p>
+
+                <dl class="mt-8 grid gap-3 sm:grid-cols-3">
+                    <div class="section-card rounded-2xl p-4">
+                        <dt class="text-sm text-slate-400">Sync mode</dt>
+                        <dd class="mt-1 text-lg font-bold text-white">Create · Update · Delete</dd>
+                    </div>
+                    <div class="section-card rounded-2xl p-4">
+                        <dt class="text-sm text-slate-400">Task import</dt>
+                        <dd class="mt-1 text-lg font-bold text-white">Open Jira issues → Kimai activities</dd>
+                    </div>
+                    <div class="section-card rounded-2xl p-4">
+                        <dt class="text-sm text-slate-400">Security</dt>
+                        <dd class="mt-1 text-lg font-bold text-white">AES-256 token encryption</dd>
+                    </div>
+                </dl>
+            </div>
+
+            <div class="relative">
+                <div class="absolute -left-8 top-10 hidden h-32 w-32 rounded-full bg-emerald-300/15 blur-3xl lg:block"></div>
+                <div class="absolute -right-8 bottom-4 hidden h-36 w-36 rounded-full bg-sky-300/15 blur-3xl lg:block"></div>
+
+                <div class="section-card glow-ring relative overflow-hidden rounded-[28px] p-4 sm:p-5">
+                    <div class="mb-4 flex items-center justify-between rounded-2xl border border-slate-400/20 bg-slate-950/40 px-4 py-3 text-sm text-slate-300">
+                        <div class="font-semibold text-white">Live workflow preview</div>
+                        <div class="rounded-full border border-emerald-300/30 bg-emerald-300/10 px-2.5 py-1 text-xs font-bold text-emerald-100">Auto sync enabled</div>
+                    </div>
+
+                    <div class="grid gap-4">
+                        <div class="rounded-2xl border border-slate-400/20 bg-slate-950/40 p-4">
+                            <div class="text-sm font-semibold text-slate-200">1. Track time in Kimai</div>
+                            <div class="mt-2 flex items-center justify-between rounded-xl bg-slate-900/80 px-3 py-2 text-sm text-slate-300">
+                                <span>Feature refinement · 1h 30m</span>
+                                <span class="rounded-full bg-sky-300/15 px-2 py-1 text-xs font-semibold text-sky-100">KAN-3</span>
+                            </div>
+                        </div>
+                        <div class="grid gap-3 sm:grid-cols-3">
+                            <div class="rounded-2xl border border-slate-400/20 bg-slate-950/40 p-4 sm:col-span-1">
+                                <div class="text-sm font-semibold text-white">2. Match issue</div>
+                                <p class="mt-2 text-sm text-slate-400">Use an activity meta field or a simple prefix like PROJECT-123.</p>
+                            </div>
+                            <div class="rounded-2xl border border-slate-400/20 bg-slate-950/40 p-4 sm:col-span-2">
+                                <div class="text-sm font-semibold text-white">3. Jira worklog appears instantly</div>
+                                <p class="mt-2 text-sm text-slate-400">No copy-paste. No missed entries. Your reporting stays consistent for the whole team.</p>
+                            </div>
+                        </div>
+                        <div class="rounded-2xl border border-amber-300/25 bg-amber-300/10 p-4 text-sm text-amber-50">
+                            Ideal for teams already using Kimai for time tracking and Jira for delivery, support, or project accounting.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <div class="section-card rounded-[28px] p-6 sm:p-8">
+                <div class="max-w-3xl">
+                    <p class="text-sm font-bold uppercase tracking-[0.22em] text-emerald-200">Why teams use it</p>
+                    <h2 class="mt-2 font-display text-3xl font-bold text-white sm:text-4xl">Built for the gap between time tracking and delivery reporting.</h2>
+                    <p class="mt-3 text-lg text-slate-300">Kimai stays comfortable for the people logging time. Jira stays accurate for the people running projects.</p>
+                </div>
+
+                <div class="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                    <article class="rounded-2xl border border-slate-400/20 bg-slate-950/45 p-5">
+                        <div class="text-2xl">⚡</div>
+                        <h3 class="mt-3 text-xl font-bold text-white">Automatic sync</h3>
+                        <p class="mt-2 text-slate-400">Create, update, or delete a Kimai timesheet and mirror the result into Jira worklogs automatically.</p>
+                    </article>
+                    <article class="rounded-2xl border border-slate-400/20 bg-slate-950/45 p-5">
+                        <div class="text-2xl">📥</div>
+                        <h3 class="mt-3 text-xl font-bold text-white">Import Jira tasks</h3>
+                        <p class="mt-2 text-slate-400">Pull open Jira issues into Kimai as activities so teams track against the right work items.</p>
+                    </article>
+                    <article class="rounded-2xl border border-slate-400/20 bg-slate-950/45 p-5">
+                        <div class="text-2xl">🔐</div>
+                        <h3 class="mt-3 text-xl font-bold text-white">Secure credentials</h3>
+                        <p class="mt-2 text-slate-400">Store Jira API tokens per user and project with AES-256 encryption and a clean admin workflow.</p>
+                    </article>
+                    <article class="rounded-2xl border border-slate-400/20 bg-slate-950/45 p-5">
+                        <div class="text-2xl">🧮</div>
+                        <h3 class="mt-3 text-xl font-bold text-white">Flexible billing logic</h3>
+                        <p class="mt-2 text-slate-400">Use a time multiplier where project reporting needs adjusted durations for invoicing or internal rules.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <div class="grid gap-6 lg:grid-cols-2">
+                <article class="section-card overflow-hidden rounded-[28px] p-4 sm:p-5">
+                    <div class="mb-4 flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-bold uppercase tracking-[0.18em] text-sky-200">Screenshot</p>
+                            <h3 class="font-display text-2xl font-bold text-white">Personal Jira credentials</h3>
+                        </div>
+                        <span class="rounded-full border border-slate-400/20 bg-slate-950/40 px-3 py-1 text-xs font-semibold text-slate-200">User-based access</span>
+                    </div>
+                    <img src="images/jira-credentials.png" alt="Kimai screen for managing Jira credentials" class="w-full rounded-2xl border border-slate-400/20 shadow-soft" loading="lazy">
+                    <p class="mt-4 text-slate-300">Each user can manage credentials for the projects they work on, keeping the setup practical for real teams and multi-project environments.</p>
+                </article>
+
+                <article class="section-card overflow-hidden rounded-[28px] p-4 sm:p-5">
+                    <div class="mb-4 flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-bold uppercase tracking-[0.18em] text-emerald-200">Screenshot</p>
+                            <h3 class="font-display text-2xl font-bold text-white">Project-level Jira mapping</h3>
+                        </div>
+                        <span class="rounded-full border border-slate-400/20 bg-slate-950/40 px-3 py-1 text-xs font-semibold text-slate-200">Admin-friendly setup</span>
+                    </div>
+                    <img src="images/project-setting.png" alt="Kimai project details with Jira sync settings" class="w-full rounded-2xl border border-slate-400/20 shadow-soft" loading="lazy">
+                    <p class="mt-4 text-slate-300">Configure the Jira instance, project key, sync options, and imported tasks directly from the Kimai project screen—without touching config files.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <div class="section-card rounded-[28px] p-6 sm:p-8">
+                <div class="grid gap-8 lg:grid-cols-[1fr_0.9fr] lg:items-start">
+                    <div>
+                        <p class="text-sm font-bold uppercase tracking-[0.22em] text-amber-200">Quick start</p>
+                        <h2 class="mt-2 font-display text-3xl font-bold text-white sm:text-4xl">Install fast, configure once, keep working normally.</h2>
+                        <ul class="mt-5 space-y-3 text-base text-slate-300">
+                            <li class="flex gap-3"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-emerald-300"></span><span>Download the latest public ZIP from GitHub and drop it into your Kimai plugins directory.</span></li>
+                            <li class="flex gap-3"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-sky-300"></span><span>Run the install command, activate the license, and set your Jira project details in the Kimai UI.</span></li>
+                            <li class="flex gap-3"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-amber-300"></span><span>Import tasks and start syncing worklogs with the issue keys your team already uses.</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="rounded-[24px] border border-slate-400/20 bg-slate-950/55 p-5 shadow-soft">
+                        <div class="mb-3 text-sm font-semibold uppercase tracking-[0.16em] text-slate-300">Install command</div>
+                        <pre class="overflow-x-auto rounded-2xl bg-black/40 p-4 text-sm leading-6 text-slate-200">bin/console kimai:bundle:kimaijirasync:install</pre>
+                        <div class="mt-4 grid gap-3 text-sm text-slate-300">
+                            <div class="rounded-2xl border border-slate-400/20 px-4 py-3">Supports Kimai 2.0+</div>
+                            <div class="rounded-2xl border border-slate-400/20 px-4 py-3">Requires PHP 8.2+</div>
+                            <div class="rounded-2xl border border-slate-400/20 px-4 py-3">Works with Jira Cloud and Server/DC flows</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mx-auto max-w-7xl px-4 pb-16 pt-6 sm:px-6 lg:px-8 lg:pb-24">
+            <div class="section-card rounded-[32px] p-6 sm:p-8 lg:p-10">
+                <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+                    <div class="max-w-2xl">
+                        <p class="text-sm font-bold uppercase tracking-[0.22em] text-emerald-200">Ready to use</p>
+                        <h2 class="mt-2 font-display text-3xl font-bold text-white sm:text-4xl">Make Kimai and Jira feel like one workflow.</h2>
+                        <p class="mt-3 text-lg text-slate-300">Download the newest public build, or go straight to the commercial checkout and deploy it for your team.</p>
+                    </div>
+                    <div class="flex flex-col gap-3 sm:flex-row">
+                        <a href="https://github.com/Cuchulain/kimai-jira-sync/releases/latest"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           class="inline-flex items-center justify-center rounded-full border border-slate-300/30 px-6 py-3 text-base font-semibold text-white transition hover:border-sky-300/60 hover:bg-slate-900/40">
+                            View public release
+                        </a>
+                        <a href="https://witcher.lemonsqueezy.com/checkout/buy/04e1eaf8-8595-4272-b30a-597ff53a2988"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           class="inline-flex items-center justify-center rounded-full bg-emerald-300 px-6 py-3 text-base font-bold text-slate-950 transition hover:bg-emerald-200">
+                            Buy on Lemon Squeezy
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script>
+    const downloadLink = document.getElementById('download-release');
+
+    fetch('https://api.github.com/repos/Cuchulain/kimai-jira-sync/releases/latest')
+        .then((response) => response.ok ? response.json() : null)
+        .then((release) => {
+            if (!release || !Array.isArray(release.assets)) {
+                return;
+            }
+
+            const preferredZip = release.assets.find((asset) => asset.name === 'KimaiJiraSyncBundle.zip');
+            const fallbackZip = release.assets.find((asset) => typeof asset.name === 'string' && asset.name.endsWith('.zip'));
+            const resolvedAsset = preferredZip ?? fallbackZip;
+
+            if (resolvedAsset && typeof resolvedAsset.browser_download_url === 'string') {
+                downloadLink.href = resolvedAsset.browser_download_url;
+            } else if (typeof release.html_url === 'string') {
+                downloadLink.href = release.html_url;
+            }
+        })
+        .catch(() => {
+            console.warn('Could not resolve the latest ZIP automatically. Keeping the public latest-download fallback.');
+        });
+</script>
+</body>
+</html>
