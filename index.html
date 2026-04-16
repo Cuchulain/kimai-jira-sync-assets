@@ -6,30 +6,7 @@
     <meta name="description" content="Kimai Jira Sync connects Kimai timesheets with Jira worklogs, imports Jira tasks into Kimai, and keeps teams in sync without manual double entry.">
     <title>Kimai Jira Sync — Time tracking that reaches Jira automatically</title>
 
-    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        ink: '#07111f',
-                        panel: '#0c1728',
-                        line: 'rgba(148, 163, 184, 0.22)',
-                        mint: '#76e5c9',
-                        sky: '#83cfff',
-                        gold: '#ffd77a'
-                    },
-                    fontFamily: {
-                        display: ['Syne', 'sans-serif'],
-                        body: ['"Source Sans 3"', 'sans-serif']
-                    },
-                    boxShadow: {
-                        soft: '0 20px 70px rgba(7, 17, 31, 0.35)'
-                    }
-                }
-            }
-        };
-    </script>
+    <link rel="stylesheet" href="styles/tailwind.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet">
@@ -84,7 +61,7 @@
         </div>
 
         <div class="hidden items-center gap-3 md:flex">
-            <a href="https://github.com/Cuchulain/kimai-jira-sync/releases/latest" target="_blank" rel="noopener noreferrer" class="rounded-full border border-slate-400/30 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-emerald-300/50 hover:text-white">Public release</a>
+            <a href="https://github.com/Cuchulain/kimai-jira-sync-assets/tree/main/dist" target="_blank" rel="noopener noreferrer" class="rounded-full border border-slate-400/30 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-emerald-300/50 hover:text-white">Public release</a>
             <a href="https://witcher.lemonsqueezy.com/checkout/buy/04e1eaf8-8595-4272-b30a-597ff53a2988" target="_blank" rel="noopener noreferrer" class="rounded-full bg-emerald-300 px-4 py-2 text-sm font-bold text-slate-950 transition hover:bg-emerald-200">Buy on Lemon Squeezy</a>
         </div>
     </header>
@@ -108,7 +85,7 @@
 
                 <div class="mt-8 flex flex-col gap-3 sm:flex-row">
                     <a id="download-release"
-                       href="https://github.com/Cuchulain/kimai-jira-sync/releases/latest/download/KimaiJiraSyncBundle.zip"
+                       href="https://github.com/Cuchulain/kimai-jira-sync-assets/raw/refs/heads/main/dist/KimaiJiraSyncBundle.zip"
                        target="_blank"
                        rel="noopener noreferrer"
                        class="inline-flex items-center justify-center rounded-full bg-emerald-300 px-6 py-3 text-base font-bold text-slate-950 shadow-soft transition hover:bg-emerald-200">
@@ -274,7 +251,7 @@
                         <p class="mt-3 text-lg text-slate-300">Download the newest public build, or go straight to the commercial checkout and deploy it for your team.</p>
                     </div>
                     <div class="flex flex-col gap-3 sm:flex-row">
-                        <a href="https://github.com/Cuchulain/kimai-jira-sync/releases/latest"
+                        <a href="https://github.com/Cuchulain/kimai-jira-sync-assets/tree/main/dist"
                            target="_blank"
                            rel="noopener noreferrer"
                            class="inline-flex items-center justify-center rounded-full border border-slate-300/30 px-6 py-3 text-base font-semibold text-white transition hover:border-sky-300/60 hover:bg-slate-900/40">
@@ -292,30 +269,5 @@
         </section>
     </main>
 </div>
-
-<script>
-    const downloadLink = document.getElementById('download-release');
-
-    fetch('https://api.github.com/repos/Cuchulain/kimai-jira-sync/releases/latest')
-        .then((response) => response.ok ? response.json() : null)
-        .then((release) => {
-            if (!release || !Array.isArray(release.assets)) {
-                return;
-            }
-
-            const preferredZip = release.assets.find((asset) => asset.name === 'KimaiJiraSyncBundle.zip');
-            const fallbackZip = release.assets.find((asset) => typeof asset.name === 'string' && asset.name.endsWith('.zip'));
-            const resolvedAsset = preferredZip ?? fallbackZip;
-
-            if (resolvedAsset && typeof resolvedAsset.browser_download_url === 'string') {
-                downloadLink.href = resolvedAsset.browser_download_url;
-            } else if (typeof release.html_url === 'string') {
-                downloadLink.href = release.html_url;
-            }
-        })
-        .catch(() => {
-            console.warn('Could not resolve the latest ZIP automatically. Keeping the public latest-download fallback.');
-        });
-</script>
 </body>
 </html>

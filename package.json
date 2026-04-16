@@ -1,0 +1,12 @@
+{
+  "name": "kimai-jira-sync-assets",
+  "private": true,
+  "packageManager": "pnpm@10.33.0",
+  "scripts": {
+    "build:css": "tailwindcss -i ./styles/input.css -o ./styles/tailwind.css --minify",
+    "watch:css": "tailwindcss -i ./styles/input.css -o ./styles/tailwind.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
+  }
+}
