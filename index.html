@@ -7,6 +7,7 @@
     <title>Kimai Jira Sync — Time tracking that reaches Jira automatically</title>
 
     <link rel="stylesheet" href="styles/tailwind.css">
+    <script defer src="https://analytics.rebma.cz/script.js" data-website-id="283f619c-dbec-4424-8a24-4381656e8cde"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet">
@@ -85,8 +86,8 @@
         </div>
 
         <div class="hidden items-center gap-3 md:flex">
-            <a href="https://github.com/Cuchulain/kimai-jira-sync-assets/tree/main/dist" target="_blank" rel="noopener noreferrer" class="rounded-full border border-slate-400/30 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-emerald-300/50 hover:text-white">Public release</a>
-            <a href="https://witcher.lemonsqueezy.com/checkout/buy/04e1eaf8-8595-4272-b30a-597ff53a2988" target="_blank" rel="noopener noreferrer" class="rounded-full bg-emerald-300 px-4 py-2 text-sm font-bold text-slate-950 transition hover:bg-emerald-200">Buy on Lemon Squeezy</a>
+            <a href="https://github.com/Cuchulain/kimai-jira-sync-assets/tree/main/dist" data-umami-event="public-release" data-umami-event-placement="header" target="_blank" rel="noopener noreferrer" class="rounded-full border border-slate-400/30 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-emerald-300/50 hover:text-white">Public release</a>
+            <a href="https://witcher.lemonsqueezy.com/checkout/buy/04e1eaf8-8595-4272-b30a-597ff53a2988" data-umami-event="buy-click" data-umami-event-placement="header" target="_blank" rel="noopener noreferrer" class="rounded-full bg-emerald-300 px-4 py-2 text-sm font-bold text-slate-950 transition hover:bg-emerald-200">Buy on Lemon Squeezy</a>
         </div>
     </header>
 
@@ -109,6 +110,8 @@
 
                 <div class="mt-8 flex flex-col gap-3 sm:flex-row">
                     <a id="download-release"
+                       data-umami-event="download-release"
+                       data-umami-event-placement="hero"
                        href="https://github.com/Cuchulain/kimai-jira-sync-assets/raw/refs/heads/main/dist/KimaiJiraSyncBundle.zip"
                        target="_blank"
                        rel="noopener noreferrer"
@@ -116,6 +119,8 @@
                         Download latest ZIP
                     </a>
                     <a href="https://witcher.lemonsqueezy.com/checkout/buy/04e1eaf8-8595-4272-b30a-597ff53a2988"
+                       data-umami-event="buy-click"
+                       data-umami-event-placement="hero"
                        target="_blank"
                        rel="noopener noreferrer"
                        class="inline-flex items-center justify-center rounded-full border border-slate-300/30 px-6 py-3 text-base font-semibold text-white transition hover:border-sky-300/60 hover:bg-slate-900/40">
@@ -276,12 +281,16 @@
                     </div>
                     <div class="flex flex-col gap-3 sm:flex-row">
                         <a href="https://github.com/Cuchulain/kimai-jira-sync-assets/tree/main/dist"
+                           data-umami-event="public-release"
+                           data-umami-event-placement="bottom"
                            target="_blank"
                            rel="noopener noreferrer"
                            class="inline-flex items-center justify-center rounded-full border border-slate-300/30 px-6 py-3 text-base font-semibold text-white transition hover:border-sky-300/60 hover:bg-slate-900/40">
                             View public release
                         </a>
                         <a href="https://witcher.lemonsqueezy.com/checkout/buy/04e1eaf8-8595-4272-b30a-597ff53a2988"
+                           data-umami-event="buy-click"
+                           data-umami-event-placement="bottom"
                            target="_blank"
                            rel="noopener noreferrer"
                            class="inline-flex items-center justify-center rounded-full bg-emerald-300 px-6 py-3 text-base font-bold text-slate-950 transition hover:bg-emerald-200">
